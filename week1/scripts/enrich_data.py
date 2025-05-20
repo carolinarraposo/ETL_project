@@ -15,7 +15,7 @@ def enrich_static_tracks_with_popularity(input_csv, output_csv):
     redirect_response = input("Cole aqui a URL de redirecionamento: ")
     code = sp_oauth.parse_response_code(redirect_response)
     token_info = sp_oauth.get_access_token(code)
-    sp = spotipy.Spotify(auth=token_info)
+    sp = spotipy.Spotify(auth=token_info['access_token'])
 
     df_tracks = pd.read_csv(input_csv)
     track_ids = df_tracks['track_uri'].str.replace('spotify:track:', '', regex=False).dropna().unique().tolist()
