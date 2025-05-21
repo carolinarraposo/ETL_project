@@ -8,7 +8,7 @@ def enrich_static_tracks_with_popularity(input_csv, output_csv):
         client_id="d78fbc07ff5140418beed2ece6e796b6",
         client_secret="359f983ca0f6470c9f63e8477df82101",
         redirect_uri="https://example.com/callback",
-        scope=None
+        scope="user-library-read user-top-read"
     )
 
     print("Vá para este link e cole a URL de redirecionamento:\n", sp_oauth.get_authorize_url())
