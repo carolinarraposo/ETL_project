@@ -1,7 +1,7 @@
 from prefect import flow, task
 from extract_static import extract_static_tracks
 from extract_api import extract_tracks_from_artists
-from enrich_data import enrich_static_tracks_with_popularity
+from enrich_data import enrich_static_tracks_with_audio_features
 import boto3
 
 @task
@@ -19,7 +19,7 @@ def run_extract_api():
 
 @task
 def run_enrich_data():
-    enrich_static_tracks_with_popularity(
+    enrich_static_tracks_with_audio_features(
         input_csv="static_tracks.csv",
         output_csv="enriched_tracks.csv"
     )
