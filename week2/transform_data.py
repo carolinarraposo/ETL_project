@@ -28,9 +28,6 @@ df["popularity_norm"] = df["popularity"] / 100
 # Verificar os primeiros valores para confirmar
 print(df[["popularity", "popularity_norm"]].head())
 
-
-
-
 # Carregar os ficheiros CSV
 enriched_df = pd.read_csv("enriched_tracks.csv")
 artists_df = pd.read_csv("artists_tracks.csv")
@@ -41,3 +38,4 @@ print("LEFT JOIN - shape:", merged_left.shape)
 
 #salvar os resultados em CSVs para inspecionar depois
 merged_left.to_csv("merged_left.csv", index=False)
+
