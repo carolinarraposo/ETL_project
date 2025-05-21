@@ -27,3 +27,17 @@ print("\nLinhas duplicadas:", duplicate_rows)
 df["popularity_norm"] = df["popularity"] / 100
 # Verificar os primeiros valores para confirmar
 print(df[["popularity", "popularity_norm"]].head())
+
+
+
+
+# Carregar os ficheiros CSV
+enriched_df = pd.read_csv("enriched_tracks.csv")
+artists_df = pd.read_csv("artists_tracks.csv")
+
+# LEFT JOIN: Mantém todas as faixas do enriched_df e junta info do artists_df se existir
+merged_left = pd.merge(enriched_df, artists_df, on="track_id", how="left")
+print("LEFT JOIN - shape:", merged_left.shape)
+
+#salvar os resultados em CSVs para inspecionar depois
+merged_left.to_csv("merged_left.csv", index=False)
