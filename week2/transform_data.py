@@ -50,9 +50,6 @@ artists_df = pd.read_csv("artists_tracks.csv")
 merged_left = pd.merge(enriched_df, artists_df, on="track_id", how="left")
 print("LEFT JOIN - shape:", merged_left.shape)
 
-# salvar os resultados em CSVs para inspecionar depois
-merged_left.to_csv("merged_left.csv", index=False)
-
 missing_values = merged_left.isnull().sum()
 print("Valores ausentes por coluna final:")
 print(missing_values)
@@ -61,5 +58,6 @@ print("Shape csv final:", merged_left.shape)
 print("Colunas:", merged_left.columns)
 
 merged_left = merged_left.drop(['popularity', 'artist', 'album', 'track_name_y', 'all_artists'], axis=1)
-print("Shape csv final:", merged_left.shape)
+print("Shape csv final (com colunas eliminadas):", merged_left.shape)
 print("Colunas:", merged_left.columns)
+merged_left.to_csv("merged_left.csv", index=False)
