@@ -24,20 +24,16 @@ CREATE TABLE playlists (
 
 CREATE TABLE tracks (
     track_id VARCHAR(100) PRIMARY KEY,
-    track_name VARCHAR(255) NOT NULL,     -- de track_name_x
-    track_name_y VARCHAR(255),            -- possível variação (API)
+    track_name VARCHAR(255) NOT NULL,         -- de track_name_x
     track_uri VARCHAR(100) UNIQUE NOT NULL,
     album_uri VARCHAR(100),
     artist_uri VARCHAR(100),
     duration_ms INT,
-    popularity FLOAT,
     popularity_norm FLOAT,
-    artist_api VARCHAR(255),              -- de coluna "artist" (API)
-    album_api VARCHAR(255),               -- de coluna "album" (API)
-    all_artists VARCHAR(MAX),             -- lista de artistas ou JSON
     FOREIGN KEY (album_uri) REFERENCES albums(album_uri),
     FOREIGN KEY (artist_uri) REFERENCES artists(artist_uri)
 );
+
 
 CREATE TABLE playlist_tracks (
     playlist_id INT,
@@ -48,3 +44,35 @@ CREATE TABLE playlist_tracks (
     FOREIGN KEY (track_id) REFERENCES tracks(track_id)
 );
 
+--inserções--
+INSERT INTO artists (artist_uri, artist_name)
+SELECT DISTINCT artist_uri, artist_name
+FROM merged_staging;
+
+INSERT INTO albums (album_uri, album_name)
+SELECT DISTINCT album_uri, album_name
+FROM merged_staging;
+
+INSERT INTO playlists (playlist_id)
+SELECT DISTINCT playlist_id
+FROM merged_staging;
+
+INSERT INTO tracks (
+    track_id, track_name, track_uri,
+    album_uri, artist_uri, duration_ms,
+    popularity_norm
+)
+SELECT DISTINCT
+    track_id, track_name_x, track_uri,
+    album_uri, artist_uri, duration_ms,
+    popularity_norm
+FROM merged_staging;
+
+INSERT INTO playlist_tracks (playlist_id, track_id, pos)
+SELECT DISTINCT playlist_id, track_id, pos
+FROM merged_staging;
+
+--validação--
+SELECT COUNT(*) FROM artists;
+SELECT COUNT(*) FROM tracks;
+SELECT * FROM tracks WHERE popularity_norm IS NULL;
