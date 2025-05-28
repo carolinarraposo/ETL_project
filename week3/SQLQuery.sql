@@ -1,4 +1,4 @@
---Semana 3--
+--SEMANA 3--
 --Carolina Raposo, 51601 e Patrícia Marcos, 51858
 
 CREATE DATABASE Spotify_ETL;
@@ -7,7 +7,7 @@ GO
 USE Spotify_ETL;
 GO
 
---criação de tabela provisória para inserir todos os dados
+--Criação de tabela provisória para inserir todos os dados
 CREATE TABLE merged_left_raw (
     pos INT,
     artist_name NVARCHAR(255),
@@ -22,15 +22,23 @@ CREATE TABLE merged_left_raw (
     popularity_norm FLOAT
 );
 
---inserção dos dados na tabela provisória
-INSERT INTO merged_left_raw (pos, artist_name,track_uri, artist_uri,track_name_x, album_uri, duration_ms, album_name,playlist_id, track_id,popularity_norm)
-SELECT DISTINCT pos, artist_name,track_uri, artist_uri,track_name_x, album_uri, duration_ms, album_name,playlist_id, track_id,popularity_norm
-FROM merged_left
+--Inserção dos dados na tabela provisória
+INSERT INTO merged_left_raw (
+    pos, artist_name, track_uri, artist_uri, track_name_x,
+    album_uri, duration_ms, album_name, playlist_id,
+    track_id, popularity_norm
+)
+SELECT DISTINCT
+    pos, artist_name, track_uri, artist_uri, track_name_x,
+    album_uri, duration_ms, album_name, playlist_id,
+    track_id, popularity_norm
+FROM merged_left;
 
---validação--
+
+--Validação--
 SELECT TOP 10 * FROM merged_left_raw;
 
---criação das tabelas definitivas
+--Criação das tabelas definitivas
 CREATE TABLE artists (
     artist_uri NVARCHAR(200) PRIMARY KEY,
     artist_name NVARCHAR(255) NOT NULL
@@ -69,7 +77,7 @@ CREATE TABLE playlist_tracks (
     FOREIGN KEY (track_id) REFERENCES tracks(track_id)
 );
 
---inserções--
+--Inserções--
 INSERT INTO artists (artist_uri, artist_name)
 SELECT DISTINCT artist_uri, artist_name
 FROM merged_left_raw;
@@ -95,13 +103,44 @@ INSERT INTO playlist_tracks (playlist_id, track_id, pos)
 SELECT DISTINCT playlist_id, track_id, pos
 FROM merged_left_raw;
 
---validação--
+--Validação--
 SELECT COUNT(*) FROM artists;
 SELECT COUNT(*) FROM albums;
 SELECT COUNT(*) FROM tracks;
 SELECT COUNT(*) FROM playlists;
 SELECT COUNT(*) FROM playlist_tracks;
 
+--Tracks sem artista associado (chave estrangeira artist_uri inválida)
+SELECT * FROM tracks
+WHERE artist_uri IS NOT NULL
+  AND artist_uri NOT IN (SELECT artist_uri FROM artists);
 
---eliminação da tabela provisória
+--Tracks sem álbum associado (chave estrangeira album_uri inválida)
+SELECT * FROM tracks
+WHERE album_uri IS NOT NULL
+  AND album_uri NOT IN (SELECT album_uri FROM albums);
+
+--Playlist_tracks com faixas inválidas (track_id inexistente na tabela tracks)
+SELECT * FROM playlist_tracks
+WHERE track_id NOT IN (SELECT track_id FROM tracks);
+
+-- Playlist_tracks com playlists inválidas
+SELECT * FROM playlist_tracks
+WHERE playlist_id NOT IN (SELECT playlist_id FROM playlists);
+
+--Verificação de nulos em campos obrigatórios nas tabelas
+SELECT * FROM artists
+WHERE artist_name IS NULL;
+
+SELECT * FROM albums
+WHERE album_name IS NULL;
+
+SELECT * FROM tracks
+WHERE track_name IS NULL;
+
+SELECT * FROM tracks
+WHERE popularity_norm IS NULL;
+
+
+--Eliminação da tabela provisória--
 DROP TABLE merged_left_raw;
