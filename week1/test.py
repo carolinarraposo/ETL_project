@@ -4,6 +4,7 @@ import pandas as pd
 import time
 
 def enrich_static_tracks_with_audio_features(input_csv, output_csv):
+
     sp_oauth = SpotifyOAuth(
         client_id="d78fbc07ff5140418beed2ece6e796b6",
         client_secret="359f983ca0f6470c9f63e8477df82101",

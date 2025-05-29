@@ -1,16 +1,10 @@
-import json
 import pandas as pd
 
-def extract_static_tracks(json_path, output_csv):
-    with open(json_path, 'r') as f:
-        data = json.load(f)
+def extract_static_tracks(csv_path, output_csv):
+    df = pd.read_csv(csv_path)
 
-    all_tracks = []
-    for playlist in data['playlists']:
-        for track in playlist['tracks']:
-            track['playlist_id'] = playlist['pid']
-            all_tracks.append(track)
+    # Remover duplicados com base no track_id
+    df_unique = df.drop_duplicates(subset=["track_id"])
 
-    df_tracks = pd.DataFrame(all_tracks).drop_duplicates(subset=['track_uri'])
-    df_tracks.to_csv(output_csv, index=False)
+    df_unique.to_csv(output_csv, index=False)
     print(f"Extração concluída: {output_csv}")

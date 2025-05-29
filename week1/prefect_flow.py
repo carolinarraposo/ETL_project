@@ -7,7 +7,7 @@ import boto3
 @task
 def run_extract_static():
     extract_static_tracks(
-        json_path="mpd.slice.0-999.json",
+        csv_path="dataset.csv",
         output_csv="static_tracks.csv"
     )
 

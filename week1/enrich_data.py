@@ -5,12 +5,12 @@ import time
 
 def enrich_static_tracks_with_popularity(input_csv, output_csv):
     sp = Spotify(auth_manager=SpotifyClientCredentials(
-        client_id="6f2b607c7c0b412d882cbbbfe2f5f3fe",
-        client_secret="dc97bf38c3674c4497a33291ca31cd0f"
+        client_id="d78fbc07ff5140418beed2ece6e796b6",
+        client_secret="359f983ca0f6470c9f63e8477df82101"
     ))
 
     df_tracks = pd.read_csv(input_csv)
-    track_ids = df_tracks['track_uri'].str.replace('spotify:track:', '', regex=False).dropna().unique().tolist()
+    track_ids = df_tracks['track_id'].dropna().unique().tolist()
 
     track_infos = []
 
