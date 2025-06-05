@@ -90,7 +90,7 @@ pip install -r requirements.txt
 • Modo Sequencial: Executar os scripts: prefect_flow.py → transform_data.py.
 
 **Executando o Dashboard:**
-Abrir o dashboard no power BI - dashboard_ETL
+Abrir o dashboard no power BI - dashboard_ETL.pbix
 
 ## Melhorias Futuras
 • Atualizações incrementais automáticas.
