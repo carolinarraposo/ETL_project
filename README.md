@@ -94,5 +94,4 @@ Abrir o dashboard no power BI - dashboard_ETL.pbix
 
 ## Melhorias Futuras
 • Atualizações incrementais automáticas.
-• Agrupamento por género musical.
 • Aplicação de algoritmos de agrupamento ou recomendação musical.
