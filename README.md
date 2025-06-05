@@ -59,43 +59,30 @@ Instalar dependências:
 
 pip install -r requirements.txt
 
-Criar arquivo .env com as credenciais da API:
+## Estrutura do Repositório
 
-SPOTIPY_CLIENT_ID=SEU_ID
-SPOTIPY_CLIENT_SECRET=SEU_SECRET
-
-Configurar a conexão com SQL Server no script load.py (via pyodbc ou string de conexão).
-
-📁 Estrutura do Repositório
-
-├── data/
-│ ├── mpd_slice_0_999.json
-│ ├── merged_left.csv
-│ └── enriched_data.csv (opcional)
+├── week1/
+│ ├── artists_tracks.csv
+| ├── dataset.csv
+│ ├── extract_api.py
+| ├── extract_static.py
+| ├── prefect_flow.py
+│ └── enriched_tracks.csv
 │
-├── scripts/
-│ ├── extract.py
-│ ├── transform.py
-│ ├── load.py
+├── week2/
+│ ├── artists_tracks.csv
+| ├── artists_tracks_cleaned.csv
+| ├── enriched_tracks.csv
+| ├── enriched_tracks_cleaned.csv
+| ├── merged_left.csv
+│ ├── transform_data.py
 │
-├── airflow/ (opcional)
-│ └── spotify_pipeline_dag.py
-│
-├── notebooks/
-│ └── análise_exploratória.ipynb
-│
-├── app_dashboard/ (futuramente)
-│ └── app.py
+├── week3/
+│ └── SQLQuery.sql
+|
+├── requirements.txt
 │
 └── README.md
-
-🧠 Possíveis extensões
-
-Adicionar audio features (danceability, energy, etc) via API Spotify.
-
-Criar um dashboard interativo com Dash, Tableau ou Metabase.
-
-Agendar o pipeline com Apache Airflow.
 
 📜 Licença
 
