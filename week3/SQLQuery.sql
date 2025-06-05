@@ -10,9 +10,9 @@ GO
 --Criação de tabela provisória para inserir todos os dados
 CREATE TABLE merged_left_raw (
     track_id NVARCHAR(100),
-    artists NVARCHAR(255),
-    album_name NVARCHAR(255),
-    track_name NVARCHAR(255),
+    artists NVARCHAR(MAX),
+    album_name NVARCHAR(MAX),
+    track_name NVARCHAR(MAX),
     popularity FLOAT,
     duration_ms INT,
     explicit_track NVARCHAR(10),
@@ -28,40 +28,30 @@ CREATE TABLE merged_left_raw (
     valence FLOAT,
     tempo FLOAT,
     time_signature INT,
-    track_genre NVARCHAR(100)
+    track_genre NVARCHAR(MAX)
 );
 
 --Inserção dos dados na tabela provisória
 INSERT INTO merged_left_raw (
-    pos, artist_name, track_uri, artist_uri, track_name_x,
-    album_uri, duration_ms, album_name, playlist_id,
-    track_id, popularity_norm
+    track_id, artists, album_name, track_name, popularity, duration_ms, explicit_track, danceability, energy, key_track, loudness, mode, speechiness, acousticness, instrumentalness, liveness, valence, tempo, time_signature, track_genre
 )
 SELECT DISTINCT
-    pos, artist_name, track_uri, artist_uri, track_name_x,
-    album_uri, duration_ms, album_name, playlist_id,
-    track_id, popularity_norm
-FROM merged_left;
+    track_id, artists, album_name, track_name_x, popularity, duration_ms, explicit_track, danceability, energy, key_track, loudness, mode, speechiness, acousticness, instrumentalness, liveness, valence, tempo, time_signature, track_genre
+FROM merged_left2;
 
 
 --Validação--
 SELECT TOP 10 * FROM merged_left_raw;
 
---Criação das tabelas definitivas
--- Tabela de artistas
-CREATE TABLE artists (
-    artist_name NVARCHAR(255) PRIMARY KEY
-);
+drop table albums
 
-CREATE TABLE albums (
-    album_name NVARCHAR(255) PRIMARY KEY
-);
+--Criação das tabelas definitivas
 
 CREATE TABLE tracks (
     track_id NVARCHAR(100) PRIMARY KEY,
-    track_name NVARCHAR(255) NOT NULL,
-    artist_name NVARCHAR(255),
-    album_name NVARCHAR(255),
+    track_name NVARCHAR(MAX) NOT NULL,
+    artist_name NVARCHAR(MAX),
+    album_name NVARCHAR(MAX),
     popularity FLOAT,
     duration_ms INT,
     explicit_track BIT,
@@ -77,36 +67,26 @@ CREATE TABLE tracks (
     valence FLOAT,
     tempo FLOAT,
     time_signature INT,
-    track_genre NVARCHAR(100),
-    FOREIGN KEY (artist_name) REFERENCES artists(artist_name),
-    FOREIGN KEY (album_name) REFERENCES albums(album_name)
+    track_genre NVARCHAR(MAX),
 );
 
 --Inserções--
-INSERT INTO artists (artist_name)
-SELECT DISTINCT artists FROM merged_left_raw;
-
-INSERT INTO albums (album_name)
-SELECT DISTINCT album_name FROM merged_left_raw;
-
 INSERT INTO tracks (
     track_id, track_name, artist_name, album_name,
-    popularity, duration_ms, explicit,
-    danceability, energy, key, loudness, mode,
+    popularity, duration_ms, explicit_track,
+    danceability, energy, key_track, loudness, mode,
     speechiness, acousticness, instrumentalness,
     liveness, valence, tempo, time_signature, track_genre
 )
 SELECT DISTINCT
-    track_id, track_name_x, artists, album_name,
-    popularity, duration_ms, explicit,
-    danceability, energy, key, loudness, mode,
+    track_id, track_name, artists, album_name,
+    popularity, duration_ms, explicit_track,
+    danceability, energy, key_track, loudness, mode,
     speechiness, acousticness, instrumentalness,
     liveness, valence, tempo, time_signature, track_genre
 FROM merged_left_raw;
 
 --Validação--
-SELECT COUNT(*) FROM artists;
-SELECT COUNT(*) FROM albums;
 SELECT COUNT(*) FROM tracks;
 
 -- Verificação de chaves estrangeiras inválidas
