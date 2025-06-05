@@ -1,9 +1,9 @@
-# Projeto ETL & Visualização — Spotify Playlists
+# Projeto ETL & Visualização — Spotify Music
 Este é um projeto prático de ETL (Extração, Transformação e Carga) com foco nos dados musicais do Spotify. Utiliza o Spotify Tracks Dataset do Kaggle e a Spotify Web API para enriquecer dados de faixas com informações.
 
 ## Visão Geral
 
-Objetivo: Extrair playlists e faixas do dataset com os audio features, enriquecer com os dados da API de álbuns, transformar os dados e carregá-los numa base de dados relacional.
+**Objetivo:** Extrair playlists e faixas do dataset com os audio features, enriquecer com os dados da API de álbuns, transformar os dados e carregá-los numa base de dados relacional.
 
 **Dados:** Spotify Tracks Dataset + API pública do Spotify.
 
@@ -35,7 +35,7 @@ Carga final na base de dados relacional (SQL Server).
 
 Tabela staging: merged_left_raw
 
-Tabelas normalizadas: artists, albums, tracks
+Tabela normalizada: tracks
 
 ### Como executar
 
@@ -84,6 +84,15 @@ pip install -r requirements.txt
 │
 └── README.md
 
-📜 Licença
 
-Este projeto é apenas para fins educacionais. Dados do Spotify usados sob os termos do Spotify Developer Policy.
+## Como Usar
+**Executando o Pipeline:**
+• Modo Sequencial: Executar os scripts: prefect_flow.py → transform_data.py.
+
+**Executando o Dashboard:**
+Abrir o dashboard no power BI - dashboard_ETL
+
+## Melhorias Futuras
+• Atualizações incrementais automáticas.
+• Agrupamento por género musical.
+• Aplicação de algoritmos de agrupamento ou recomendação musical.
